@@ -33,34 +33,27 @@ jobs:
     if: always()
     steps:
     - uses: actions/checkout@v1
+      with:
+        ref: gh-pages
     - uses: technote-space/workflow-conclusion-action@v2
     - name: Download an artifact
       uses: actions/download-artifact@v2
       with:
         name: report
-    - name: Commit result
+    - name: Move files into place
       run: |
+        mv report.json _data/`date +"%Y-%m-%d"`.json
         cp tmpl/img/${{ env.WORKFLOW_CONCLUSION }}.svg status.svg
-        cp tmpl/md/${{ env.WORKFLOW_CONCLUSION }}.md latest.md
+        cp tmpl/md/${{ env.WORKFLOW_CONCLUSION }}.md _posts/`date +"%Y-%m-%d"`-index.md
 
         # setup git
         git config --global user.email "57559326+codeforIATIbot@users.noreply.github.com"
         git config --global user.name "Code for IATI bot"
 
-        # clone the gh-pages branch into /gh-pages/
-        git clone --branch gh-pages https://${{ secrets.TOKEN }}@github.com/codeforIATI/iati-status.git gh-pages
-
-        # move the generated report into place
-        mv report.json gh-pages/_data/`date +"%Y-%m-%d"`.json
-        mv status.svg gh-pages
-        mv latest.md gh-pages/_posts/`date +"%Y-%m-%d"`-index.md
-
         # commit and push
-        cd gh-pages
         git add .
         git commit --message "Github actions build: ${{ github.run_number }}"
-        git push
-
-        # clean up
-        cd ..
-        rm -rf gh-pages
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
