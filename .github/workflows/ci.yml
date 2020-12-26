@@ -20,26 +20,35 @@ jobs:
     - name: Run tests
       run: |
         pytest
-
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: report
+        path: report.json
   commit:
     name: Commit result
     needs: test
     runs-on: ubuntu-latest
-    if: always()  # set always
+    if: always()
     steps:
     - uses: actions/checkout@v1
     - uses: technote-space/workflow-conclusion-action@v2
+    - name: Download an artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: report
     - name: Commit result
       run: |
         cp tmpl/img/${{ env.WORKFLOW_CONCLUSION }}.svg status.svg
         cp tmpl/md/${{ env.WORKFLOW_CONCLUSION }}.md latest.md
 
         # setup git
-        git config --global user.email "deploy@travis-ci.org"
+        git config --global user.email "57559326+codeforIATIbot@users.noreply.github.com"
         git config --global user.name "Code for IATI bot"
 
         # clone the gh-pages branch into /gh-pages/
-        git clone --branch gh-pages https://${{ secrets.GITHUB_TOKEN }}@github.com/codeforIATI/iati-status.git gh-pages
+        git clone --branch gh-pages https://${{ secrets.TOKEN }}@github.com/codeforIATI/iati-status.git gh-pages
 
         # move the generated report into place
         mv report.json gh-pages/_data/`date +"%Y-%m-%d"`.json
