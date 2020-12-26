@@ -4,10 +4,10 @@ from inspect import cleandoc
 import json
 import re
 
-import pytest
 
 def pytest_configure(config):
     config.pluginmanager.register(JSONPlugin(config))
+
 
 class JSONPlugin:
     def __init__(self, config):
