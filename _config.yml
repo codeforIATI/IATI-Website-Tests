@@ -23,6 +23,7 @@ defaults:
 
 exclude:
   - /venv/
+  - /tmpl/
   - CNAME
   - Gemfile
   - Gemfile.lock
