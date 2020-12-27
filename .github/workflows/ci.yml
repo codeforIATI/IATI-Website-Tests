@@ -1,6 +1,5 @@
 name: CI
 on:
-  push:
   schedule:
     - cron: '0 */6 * * *'
 jobs:
@@ -20,7 +19,7 @@ jobs:
     - name: Run tests
       run: |
         pytest
-    - name: Archive code coverage results
+    - name: Save report
       uses: actions/upload-artifact@v2
       if: always()
       with:
@@ -36,7 +35,7 @@ jobs:
       with:
         ref: gh-pages
     - uses: technote-space/workflow-conclusion-action@v2
-    - name: Download an artifact
+    - name: Download report
       uses: actions/download-artifact@v2
       with:
         name: report
@@ -45,12 +44,10 @@ jobs:
         mv report.json _data/`date +"%Y-%m-%d"`.json
         cp tmpl/img/${{ env.WORKFLOW_CONCLUSION }}.svg status.svg
         cp tmpl/md/${{ env.WORKFLOW_CONCLUSION }}.md _posts/`date +"%Y-%m-%d"`-index.md
-
-        # setup git
+    - name: Commit files
+      run: |
         git config --global user.email "57559326+codeforIATIbot@users.noreply.github.com"
         git config --global user.name "Code for IATI bot"
-
-        # commit and push
         git add .
         git commit --message "Github actions build: ${{ github.run_number }}"
     - name: Push changes
