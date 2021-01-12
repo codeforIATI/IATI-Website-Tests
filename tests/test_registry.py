@@ -9,7 +9,7 @@ class TestIATIRegistry(WebTestBase):
     """
     requests_to_load = {
         'iatiregistry.org': {
-            'url': 'http://www.iatiregistry.org/'
+            'url': 'http://iatiregistry.org/'
         },
         'IATI Registry registration page': {
             'url': 'http://iatiregistry.org/user/register'
