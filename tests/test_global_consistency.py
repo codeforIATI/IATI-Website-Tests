@@ -37,10 +37,10 @@ class TestGlobalConsistency(WebTestBase):
             'url': 'http://dashboard.iatistandard.org/publishers.html'
         },
         'Datastore API - Activity Count': {
-            'url': 'http://datastore.iatistandard.org/api/1/access/activity.xml?limit=0', 'min_response_size': 295
+            'url': 'https://iatidatastore.iatistandard.org/api/activities/?format=json&page_size=1', 'min_response_size': 295
         },
-        'Query Builder': {
-            'url': 'http://datastore.iatistandard.org/query/'
+        'Query Builder - Publisher Count': {
+            'url': 'https://iatidatastore.iatistandard.org/api/publishers/?format=json&is_active=True&page_size=1', 'min_response_size': 295
         }
     }
 
@@ -101,7 +101,8 @@ class TestGlobalConsistency(WebTestBase):
 
     @pytest.fixture
     def datastore_api_activity_count(cls):
-        return cls._locate_int_on_page('Datastore API - Activity Count', '//result/iati-activities/query/total-count')
+        req = cls.loaded_request_from_test_name('Datastore API - Activity Count')
+        return req.json()['count']
 
     @pytest.fixture
     def registry_home_publisher_count(cls):
@@ -130,7 +131,8 @@ class TestGlobalConsistency(WebTestBase):
 
     @pytest.fixture
     def query_builder_publisher_count(cls):
-        return cls._count_element_on_page('Query Builder', '//*[@id="reporting-org"]/option')
+        req = cls.loaded_request_from_test_name('Query Builder - Publisher Count')
+        return req.json()['count']
 
     @pytest.fixture
     def standard_home_activity_count(cls):
