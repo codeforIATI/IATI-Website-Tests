@@ -7,6 +7,7 @@ plugins:
 
 feed:
   excerpt_only: true
+  posts_limit: 3
 
 defaults:
   -
