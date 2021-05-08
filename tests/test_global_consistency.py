@@ -142,18 +142,17 @@ class TestGlobalConsistency(WebTestBase):
     def standard_home_publisher_count(cls):
         return cls._locate_int_on_page('IATI Standard - Homepage', '//*[@id="stat-publishers"]')
 
-    def test_activity_count_above_min(self, dash_home_activity_count, dash_home_unique_activity_count, dash_activities_activity_count, dash_activities_unique_activity_count, datastore_api_activity_count):
+    def test_dash_activity_count_above_min(self, dash_home_unique_activity_count):
         """
-        Test to ensure the unique activity count is above a specified minumum value.
-        This checks both the dashboard and datastore.
+        Test to ensure the dashboard unique activity count is above a specified minimum value (85,000).
         """
-        min_activity_count = 850000
+        assert dash_home_unique_activity_count >= 850000
 
-        assert dash_home_activity_count >= min_activity_count
-        assert dash_home_unique_activity_count >= min_activity_count
-        assert dash_activities_activity_count >= min_activity_count
-        assert dash_activities_unique_activity_count >= min_activity_count
-        assert datastore_api_activity_count >= min_activity_count
+    def test_ds_activity_count_above_min(self, datastore_api_activity_count):
+        """
+        Test to ensure the datastore activity count is above a specified minimum value (85,000).
+        """
+        assert datastore_api_activity_count >= 850000
 
     def test_activity_count_dash_value_consistency(self, dash_home_activity_count, dash_home_unique_activity_count, dash_activities_activity_count, dash_activities_unique_activity_count):
         """
@@ -162,18 +161,17 @@ class TestGlobalConsistency(WebTestBase):
         assert dash_home_activity_count == dash_activities_activity_count
         assert dash_home_unique_activity_count == dash_activities_unique_activity_count
 
-    def test_unique_vs_total_dash_activity_values(self, dash_home_activity_count, dash_home_unique_activity_count, dash_activities_activity_count, dash_activities_unique_activity_count):
+    def test_unique_vs_total_dash_activity_values(self, dash_home_activity_count, dash_home_unique_activity_count):
         """
         Test to ensure unique activity counts within the dashboard are not higher
         than the overall activity counts.
         """
         assert dash_home_activity_count >= dash_home_unique_activity_count
-        assert dash_activities_activity_count >= dash_activities_unique_activity_count
 
     # @pytest.mark.skip(reason="Data is often wrong due to delays between dashboard regeneration cycles")
     def test_activity_count_consistency_datastore_dashboard(self, datastore_api_activity_count, dash_home_unique_activity_count):
         """
-        Test to ensure the activity count is consistent, within a margin of error,
+        Test to ensure the activity count is consistent, within a 10% margin of error,
         between the datastore and dashboard.
         """
         max_datastore_disparity = 0.1
@@ -183,7 +181,7 @@ class TestGlobalConsistency(WebTestBase):
 
     def test_activity_count_consistency_iatistandard_homepage(self, registry_activity_count, standard_home_activity_count):
         """
-        Test to ensure the activity count is consistent, within a margin of error,
+        Test to ensure the activity count is consistent, within a 3% margin of error,
         between the registry and the IATI Standard homepage.
         """
         max_registry_disparity = 0.03
@@ -193,7 +191,7 @@ class TestGlobalConsistency(WebTestBase):
 
     def test_activity_file_count_above_min(self, registry_activity_file_count, dash_home_activity_file_count, dash_files_activity_file_count):
         """
-        Test to ensure the unique activity file count is above a specified minumum value.
+        Test to ensure the unique activity file count is above a specified minimum value (4,700).
         This checks both the dashboard and registry.
         """
         min_file_count = 4700
@@ -221,7 +219,7 @@ class TestGlobalConsistency(WebTestBase):
 
     def test_org_file_count_above_min(self, registry_organisation_file_count, dash_home_org_file_count, dash_files_org_file_count):
         """
-        Test to ensure the organisation file count is above a specified minumum value.
+        Test to ensure the organisation file count is above a specified minimum value (450).
         This checks both the dashboard and registry.
         """
         min_file_count = 450
@@ -249,7 +247,7 @@ class TestGlobalConsistency(WebTestBase):
 
     def test_publisher_count_above_min(self, registry_home_publisher_count, dash_home_publisher_count, dash_publishers_publisher_count):
         """
-        Test to ensure the publisher count is above a specified minumum value.
+        Test to ensure the publisher count is above a specified minimum value (630).
         This checks both the dashboard and registry.
         """
         min_publisher_count = 630
