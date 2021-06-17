@@ -8,10 +8,10 @@ class TestIATIDiscuss(WebTestBase):
     Test discuss (discuss.iatistandard.org)
     """
     requests_to_load = {
-        'IATI Discuss': {
+        'IATI Discuss homepage': {
             'url': 'http://discuss.iatistandard.org/?iati-website-tests'
         },
-        'IATI Discuss Welcome Thread': {
+        'IATI Discuss welcome thread': {
             'url': 'http://discuss.iatistandard.org/t/welcome-to-iati-discuss/6?iati-website-tests'
         }
     }
