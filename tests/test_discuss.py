@@ -29,7 +29,7 @@ class TestIATIDiscuss(WebTestBase):
     @pytest.mark.parametrize("target_request", ["IATI Discuss Welcome Thread"])
     def test_welcome_thread_welcomingness(self, target_request):
         """
-        Test the Welcome Thread says "Welcome to IATI Discuss".
+        Test the Welcome Thread says 'Welcome to IATI Discuss'.
         """
         req = self.loaded_request_from_test_name(target_request)
         title_xpath = '/html/head/title'

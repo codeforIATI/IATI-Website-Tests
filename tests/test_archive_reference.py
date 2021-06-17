@@ -57,7 +57,8 @@ class TestArchiveReference(WebTestBase):
     @pytest.mark.parametrize("target_request", ["IATI Standard Homepage"])
     def test_locate_text(self, target_request):
         """
-        Tests that each page contains the text "technical publishing framework" in the heading.
+        Tests that each page contains the text
+        'technical publishing framework' in the heading.
         """
         req = self.loaded_request_from_test_name(target_request)
         text_to_find = "technical publishing framework"

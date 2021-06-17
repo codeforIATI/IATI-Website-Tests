@@ -39,8 +39,8 @@ class TestIATIStandard(WebTestBase):
         """
         Confirm the page contains the following text:
 
-            IATI is a global initiative to improve the transparency
-            of development and humanitarian resources
+        IATI is a global initiative to improve the transparency
+        of development and humanitarian resources
         """
         text_to_find = "IATI is a global initiative to improve the " + \
                        "transparency of development and humanitarian " + \
