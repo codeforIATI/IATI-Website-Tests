@@ -36,12 +36,12 @@ class TestGlobalConsistency(WebTestBase):
         'IATI Dashboard - Publisher Page': {
             'url': 'http://dashboard.iatistandard.org/publishers.html'
         },
-        'Datastore API - Activity Count': {
-            'url': 'https://iatidatastore.iatistandard.org/api/activities/?format=json&page_size=1', 'min_response_size': 295
-        },
-        'Query Builder - Publisher Count': {
-            'url': 'https://iatidatastore.iatistandard.org/api/publishers/?format=json&is_active=True&page_size=1', 'min_response_size': 295
-        }
+        # 'Datastore API - Activity Count': {
+        #     'url': 'https://iatidatastore.iatistandard.org/api/activities/?format=json&page_size=1', 'min_response_size': 295
+        # },
+        # 'Query Builder - Publisher Count': {
+        #     'url': 'https://iatidatastore.iatistandard.org/api/publishers/?format=json&is_active=True&page_size=1', 'min_response_size': 295
+        # }
     }
 
     def _count_element_on_page(self, test_name, xpath):
@@ -99,10 +99,10 @@ class TestGlobalConsistency(WebTestBase):
     def dash_publishers_publisher_count(cls):
         return cls._locate_int_on_page('IATI Dashboard - Publisher Page', '//span[@id="publishers"]')
 
-    @pytest.fixture
-    def datastore_api_activity_count(cls):
-        req = cls.loaded_request_from_test_name('Datastore API - Activity Count')
-        return req.json()['count']
+    # @pytest.fixture
+    # def datastore_api_activity_count(cls):
+    #     req = cls.loaded_request_from_test_name('Datastore API - Activity Count')
+    #     return req.json()['count']
 
     @pytest.fixture
     def registry_home_publisher_count(cls):
@@ -129,10 +129,10 @@ class TestGlobalConsistency(WebTestBase):
     def registry_organisation_file_count(cls):
         return cls._locate_int_on_page('IATI Registry - Organisation Dataset Page', '//*[@id="content"]/div[3]/div/section[1]/div[1]/form/h2')
 
-    @pytest.fixture
-    def query_builder_publisher_count(cls):
-        req = cls.loaded_request_from_test_name('Query Builder - Publisher Count')
-        return req.json()['count']
+    # @pytest.fixture
+    # def query_builder_publisher_count(cls):
+    #     req = cls.loaded_request_from_test_name('Query Builder - Publisher Count')
+    #     return req.json()['count']
 
     @pytest.fixture
     def standard_home_activity_count(cls):
@@ -148,11 +148,11 @@ class TestGlobalConsistency(WebTestBase):
         """
         assert dash_home_unique_activity_count >= 850000
 
-    def test_ds_activity_count_above_min(self, datastore_api_activity_count):
-        """
-        Test to ensure the datastore activity count is above a specified minimum value (85,000).
-        """
-        assert datastore_api_activity_count >= 850000
+    # def test_ds_activity_count_above_min(self, datastore_api_activity_count):
+    #     """
+    #     Test to ensure the datastore activity count is above a specified minimum value (85,000).
+    #     """
+    #     assert datastore_api_activity_count >= 850000
 
     def test_activity_count_dash_value_consistency(self, dash_home_activity_count, dash_home_unique_activity_count, dash_activities_activity_count, dash_activities_unique_activity_count):
         """
@@ -168,16 +168,16 @@ class TestGlobalConsistency(WebTestBase):
         """
         assert dash_home_activity_count >= dash_home_unique_activity_count
 
-    # @pytest.mark.skip(reason="Data is often wrong due to delays between dashboard regeneration cycles")
-    def test_activity_count_consistency_datastore_dashboard(self, datastore_api_activity_count, dash_home_unique_activity_count):
-        """
-        Test to ensure the activity count is consistent, within a 10% margin of error,
-        between the datastore and dashboard.
-        """
-        max_datastore_disparity = 0.1
+    # # @pytest.mark.skip(reason="Data is often wrong due to delays between dashboard regeneration cycles")
+    # def test_activity_count_consistency_datastore_dashboard(self, datastore_api_activity_count, dash_home_unique_activity_count):
+    #     """
+    #     Test to ensure the activity count is consistent, within a 10% margin of error,
+    #     between the datastore and dashboard.
+    #     """
+    #     max_datastore_disparity = 0.1
 
-        assert datastore_api_activity_count >= dash_home_unique_activity_count * (1 - max_datastore_disparity)
-        assert datastore_api_activity_count <= dash_home_unique_activity_count * (1 + max_datastore_disparity)
+    #     assert datastore_api_activity_count >= dash_home_unique_activity_count * (1 - max_datastore_disparity)
+    #     assert datastore_api_activity_count <= dash_home_unique_activity_count * (1 + max_datastore_disparity)
 
     def test_activity_count_consistency_iatistandard_homepage(self, registry_activity_count, standard_home_activity_count):
         """
@@ -273,15 +273,15 @@ class TestGlobalConsistency(WebTestBase):
         assert registry_home_publisher_count >= dash_home_publisher_count * (1 - max_registry_disparity)
         assert registry_home_publisher_count <= dash_home_publisher_count * (1 + max_registry_disparity)
 
-    def test_publisher_count_consistency_query_builder(self, registry_home_publisher_count, query_builder_publisher_count):
-        """
-        Test to ensure the publisher count is consistent, within a margin of error,
-        between the registry and query builder.
-        """
-        max_registry_disparity = 0.01
+    # def test_publisher_count_consistency_query_builder(self, registry_home_publisher_count, query_builder_publisher_count):
+    #     """
+    #     Test to ensure the publisher count is consistent, within a margin of error,
+    #     between the registry and query builder.
+    #     """
+    #     max_registry_disparity = 0.01
 
-        assert registry_home_publisher_count >= query_builder_publisher_count * (1 - max_registry_disparity)
-        assert registry_home_publisher_count <= query_builder_publisher_count * (1 + max_registry_disparity)
+    #     assert registry_home_publisher_count >= query_builder_publisher_count * (1 - max_registry_disparity)
+    #     assert registry_home_publisher_count <= query_builder_publisher_count * (1 + max_registry_disparity)
 
     def test_publisher_count_consistency_iatistandard_homepage(self, registry_home_publisher_count, standard_home_publisher_count):
         """
